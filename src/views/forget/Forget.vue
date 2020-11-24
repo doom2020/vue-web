@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="forget">
   {{message}}
   </div>
 </template>
@@ -10,12 +10,10 @@ import { ref } from 'vue'
 export default {
   name: 'Home',
   setup() {
-    let message = ref("this is home page")
+    let message = ref("this is forget password page")
     return {
       message
     }
-  },
-  components: {
   }
 }
 </script>
