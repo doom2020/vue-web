@@ -11,41 +11,41 @@
             <div class="form-group has-success has-feedback">
                 <label class="control-label col-sm-2" for="account">用户账号</label>
                 <div class="col-sm-8">
-                    <input type="text" @:blur="checkAccount" v-model='infoForm.account' ref="accountInput" class="form-control" placeholder="输入昵称">
+                    <input type="text" @blur="checkAccount" v-model='infoForm.account' ref="accountInput" class="form-control" placeholder="输入昵称">
                     <span :class="classInfo.account" class="form-control-feedback" :style="styleInfo.account"></span>
                 </div>
                 <div class="col-sm-2" style="height: 34px;line-height: 35px;">
-                    <span :style="styleInfo.account" v-cloak>{{ errorMsg.account }}</span>
+                    <span :style="styleInfo.account">{{ errorMsg.account }}</span>
                 </div>
             </div>
             <div class="form-group has-success has-feedback">
                 <label class="control-label col-sm-2" for="phone">用户手机</label>
                 <div class="col-sm-8">
-                    <input type="text" @:blur="checkPhone" v-model="phone" class="form-control" placeholder="输入手机号">
+                    <input type="text" @blur="checkPhone" v-model="infoForm.phone" class="form-control" placeholder="输入手机号">
                     <span :class="classInfo.phone" class="form-control-feedback" :style="styleInfo.phone"></span>
                 </div>
                 <div class="col-sm-2" style="height: 34px;line-height: 35px;">
-                    <span :style="styleInfo.phone" v-cloak>{{ errorMsg.phone }}</span>
+                    <span :style="styleInfo.phone">{{ errorMsg.phone }}</span>
                 </div>
             </div>
             <div class="form-group has-success has-feedback">
                 <label class="control-label col-sm-2" for="upwd">用户密码</label>
                 <div class="col-sm-8">
-                    <input type="password" @blur="checkUpwd" v-model="upwd" class="form-control" placeholder="输人密码">
+                    <input type="password" @blur="checkUpwd" v-model="infoForm.upwd" class="form-control" placeholder="输人密码">
                     <span :class="classInfo.upwd" class="form-control-feedback" :style="styleInfo.upwd"></span>
                 </div>
                 <div class="col-sm-2" style="height: 34px;line-height: 35px;">
-                    <span :style="styleInfo.upwd" v-cloak>{{ errorMsg.upwd }}</span>
+                    <span :style="styleInfo.upwd">{{ errorMsg.upwd }}</span>
                 </div>
             </div>
             <div class="form-group has-success has-feedback">
                 <label class="control-label col-sm-2" for="cpwd">确认密码</label>
                 <div class="col-sm-8">
-                    <input type="password" @blur="checkCpwd" v-model="cpwd" class="form-control" placeholder="确认密码">
+                    <input type="password" @blur="checkCpwd" v-model="infoForm.cpwd" class="form-control" placeholder="确认密码">
                     <span :class="classInfo.cpwd" class="form-control-feedback" :style="styleInfo.cpwd"></span>
                 </div>
                 <div class="col-sm-2" style="height: 34px;line-height: 35px;">
-                    <span :style="styleInfo.upwd" v-cloak>{{ errorMsg.cpwd }}</span>
+                    <span :style="styleInfo.upwd">{{ errorMsg.cpwd }}</span>
                 </div>
             </div>
             <div style="margin-top: 60px;text-align: center">

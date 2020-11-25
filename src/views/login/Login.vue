@@ -80,7 +80,7 @@ export default {
       }
       function btnLogin(){
           if(!infoForm.account || !infoForm.password){
-              showErrMsg = true
+              showErrMsg.value = true
           } else{
               console.log("进行ajax请求btnLgon")
           }
