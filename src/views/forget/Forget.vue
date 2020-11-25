@@ -8,9 +8,9 @@
 import { ref } from 'vue'
 
 export default {
-  name: 'Home',
+  name: 'Forget',
   setup() {
-    let message = ref("this is forget password page")
+    const message = ref("this is forget password page")
     return {
       message
     }

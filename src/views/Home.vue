@@ -10,7 +10,7 @@ import { ref } from 'vue'
 export default {
   name: 'Home',
   setup() {
-    let message = ref("this is home page")
+    const message = ref("this is home page")
     return {
       message
     }

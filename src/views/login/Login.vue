@@ -41,16 +41,16 @@ export default {
   name: 'Login',
   setup() {
       // 定义普通变量使用ref,定义对象和数组使用reactive
-      let showErrMsg = ref(false)
-      let infoForm = reactive({
+      const showErrMsg = ref(false)
+      const infoForm = reactive({
           account: '',
           password: ''
       })
-      let invalidStyle = reactive({
+      const invalidStyle = reactive({
           account: {color: '#FF3333'},
           password: {color: '#FF3333'}
       })
-      let loginDisabled = ref(false)
+      const loginDisabled = ref(false)
       const accountInput = ref(null) // 创建一个dom引用,return 出去
       onMounted(() => {
           accountInput.value.focus() // accountInput.value 就是dom对象

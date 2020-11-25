@@ -69,32 +69,32 @@ export default {
   name: 'Register',
   setup() {
     // 定义变量
-    let infoForm = reactive({
+    const infoForm = reactive({
       account: '',
       phone: '',
       upwd: '',
       cpwd: ''
     })
-    let styleInfo = reactive({
+    const styleInfo = reactive({
       account: {},
       phone: {},
       upwd: {},
       cpwd: {}
     })
-    let classInfo = reactive({
+    const classInfo = reactive({
       account: 'glyphicon glyphicon glyphicon-user',
       phone: 'glyphicon glyphicon-earphone',
       upwd: 'glyphicon glyphicon-lock',
       cpwd: 'glyphicon glyphicon-lock'
     })
-    let errorMsg = reactive({
+    const errorMsg = reactive({
       account: '',
       phone: '',
       upwd: '',
       cpwd: ''
     })
-    let showErrMsg = ref(false)
-    let flag = reactive({
+    const showErrMsg = ref(false)
+    const flag = reactive({
       account: false,
       phone: false,
       upwd: false,
