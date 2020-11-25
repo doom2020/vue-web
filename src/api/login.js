@@ -1,11 +1,16 @@
 import request from '../utils/request'
 
 
-export function login(){
+export function login(params){
+    console.log('2222222222')
+    console.log(params)
     return request({
         url: '/login',
         method: 'post',
-        data: '',
+        data: {
+            account: params.account,
+            password: params.password
+        },
         responseType: 'json'
     })
 }

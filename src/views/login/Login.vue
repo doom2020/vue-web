@@ -36,6 +36,7 @@
 <script>
 import { ref, reactive, onMounted} from 'vue'
 // import { useRouter } from 'vue-router'
+import { login } from '../../api/login'
 
 export default {
   name: 'Login',
@@ -83,6 +84,12 @@ export default {
               showErrMsg.value = true
           } else{
               console.log("进行ajax请求btnLgon")
+              const params = { account: infoForm.account, password: infoForm.password}
+              login(params).then(response => {
+                  console.log(response)
+              }).catch(error => {
+                  console.log(error)
+              })
           }
       }
     //   const router = useRouter()

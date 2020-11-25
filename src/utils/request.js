@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 创建axios实例
 const instance = axios.create({
-    baseURL: '127.0.0.1:8000',
+    baseURL: 'http://127.0.0.1:8000',
     timeout: 1000
 })
 
@@ -18,6 +18,7 @@ axios.interceptors.request.use(function(config){
 // 响应拦截器
 axios.interceptors.response.use(function(response){
     // 对响应数据做点什么
+    console.log(response)
 }, function(error){
     // 对响应错误做点什么
     return Promise.reject(error)
@@ -31,7 +32,7 @@ instance.interceptors.request.use(function(config){
 })
 
 instance.interceptors.response.use(function(response){
-
+    console.log(response)
 }, function(error){
     return Promise.reject(error)
 })
