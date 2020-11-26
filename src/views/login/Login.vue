@@ -86,9 +86,20 @@ export default {
               console.log("进行ajax请求btnLgon")
               const params = { account: infoForm.account, password: infoForm.password}
               login(params).then(response => {
-                  console.log(response)
+                  const ret = response.data.ret
+                  const data = response.data.data
+                  if(!ret){
+                      alert("登录成功")
+                      console.log(data)
+                      sessionStorage.setItem('user', response.data.user)
+                      console.log(sessionStorage.getItem('user'))
+                  } else{
+                      alert("登录失败")
+                      showErrMsg.value = true
+                  }
               }).catch(error => {
                   console.log(error)
+                  alert("后端服务器响应出错")
               })
           }
       }
