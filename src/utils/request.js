@@ -24,15 +24,18 @@ axios.interceptors.response.use(function(response){
     return Promise.reject(error)
 })
 
-// 实例请求响应拦截器
+// 实例请求拦截器
 instance.interceptors.request.use(function(config){
+    console.log(config) // config 包含请求的各种参数,可在此次对请求做一些处理
     return config
 }, function(error){
     return Promise.reject(error)
 })
 
+// 实例响应拦截器
 instance.interceptors.response.use(function(response){
     console.log(response)
+    return response  // 响应信息都在response里面,处理后必须返回
 }, function(error){
     return Promise.reject(error)
 })
