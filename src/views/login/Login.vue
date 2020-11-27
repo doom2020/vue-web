@@ -10,7 +10,7 @@
         <form style="padding-top: 15px;">
             <div class="form-group has-success has-feedback">
                 <label class="control-label" for="account">Account</label>
-                <input v-model="infoForm.account" @blur="checkAccount" ref="accountInput" type="text" class="form-control" placeholder="请输入用户名">
+                <input v-model="infoForm.account" @blur="checkAccount" @keyup.enter="listenKeyupEnter" ref="accountInput" type="text" class="form-control" placeholder="请输入用户名">
                 <span class="glyphicon glyphicon-user form-control-feedback" :style="invalidStyle.account"></span>
             </div>
             <div class="form-group has-success has-feedback">
@@ -34,9 +34,10 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted} from 'vue'
+import { ref, reactive, onMounted, computed} from 'vue'
 // import { useRouter } from 'vue-router'
 import { login } from '../../api/login'
+import store from '../../store/index'
 
 export default {
   name: 'Login',
@@ -57,12 +58,22 @@ export default {
           accountInput.value.focus() // accountInput.value 就是dom对象
           // console.log("onMounted")
           // console.log(accountInput.value)
-          window.addEventListener('keydown', keyDown) // 监听键盘回车事件
+          window.addEventListener('keydown', keyDown) // 监听键盘回车事件keyDown 移除事件监听 removeEventListener(event, function)
+          window.addEventListener('keyup', keyUp) // 监听键盘回车事件keyUp
       })
       // 键盘回车事件
       function keyDown(e){
           if(e.keyCode == 13){
               console.log("keyDown")
+          }
+      }
+      function keyUp(e){
+          if(e.keyCode == 13){
+              console.log("keyUp")
+              store.commit('add', 2)
+              store.commit('update', '1')
+              console.log(store.state.count)
+              console.log(store.state.name)
           }
       }
       function checkAccount(){
@@ -103,15 +114,19 @@ export default {
               })
           }
       }
-    //   const router = useRouter()
-    //   function toForgetPassword(){
-    //       router.push('/register')
-    //   }
-    //   function toRegister(){
-    //       router.push('/register')
-    //   }
+      function listenKeyupEnter(envet){
+          console.log('keyup enter')
+          console.log(envet)
+      }
+      const count = computed(() => {  // 计算属性获取vuex 数据 return
+          return store.state.count
+      })
+      const name = computed(() => {   // 计算属性获取vuex 数据 return
+          return store.state.name
+      })
       return {
-          showErrMsg, infoForm, invalidStyle, loginDisabled, keyDown, checkAccount, checkPassword, accountInput, btnLogin
+          showErrMsg, infoForm, invalidStyle, loginDisabled, keyDown, checkAccount, checkPassword, accountInput, btnLogin, listenKeyupEnter,
+          keyUp, count, name
       }
   }
 }
