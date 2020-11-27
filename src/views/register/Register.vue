@@ -64,10 +64,13 @@
 
 <script>
 import { ref, reactive, onMounted } from 'vue'
+import { register, check_account, check_phone} from '../../api/register'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'Register',
   setup() {
+    const router = useRouter()
     // 定义变量
     const infoForm = reactive({
       account: '',
@@ -120,6 +123,26 @@ export default {
         flag.account = false
       } else {
         console.log("进行ajax请求checkAccount")
+        const params = {account: infoForm.account}
+        check_account(params).then(response => {
+          console.log(response)
+          const ret = response.data.ret
+          if(!ret){
+            console.log("用户名ok")
+            classInfo.account = 'glyphicon glyphicon-ok'
+            styleInfo.account = 'green'
+            errorMsg.account = ''
+            flag.account = true
+          } else{
+            classInfo.account = 'glyphicon glyphicon-remove'
+            styleInfo.account = {color: '#FF3333'}
+            errorMsg.account = '用户名无效'
+            flag.account = false
+          }
+        }).cacth(error => {
+          console.log(error)
+          alert("服务器响应异常")
+        })
       }
     }
     function checkPhone(){
@@ -135,6 +158,27 @@ export default {
         flag.phone = false
       } else {
         console.log("进行ajax请求checkPhone")
+        const params = {phone: infoForm.phone}
+        check_phone(params).then(response => {
+          console.log(response)
+          const ret = response.data.ret
+          if(!ret){
+            console.log("手机号ok")
+            classInfo.phone = 'glyphicon glyphicon-ok'
+            styleInfo.phone = {color: 'green'}
+            errorMsg.phone = ''
+            flag.phone = true
+          } else{
+            console.log("手机号无效")
+            classInfo.phone = 'glyphicon glyphicon-remove'
+            styleInfo.phone = {color: '#FF3333'}
+            errorMsg.phone = '手机号无效'
+            flag.phone = false
+          }
+        }).catch(error => {
+          console.log(error)
+          alert("服务器异常")
+        })
       }
     }
     function checkUpwd(){
@@ -176,6 +220,25 @@ export default {
     function btnRegister(){
       if(flag.account && flag.phone && flag.upwd && flag.cpwd){
         console.log("进行ajax请求btnRegister")
+        const params = {account: infoForm.account, phone: infoForm.phone, upwd: infoForm.upwd, cpwd: infoForm.cpwd}
+        register(params).then(response => {
+          console.log(response)
+          const ret = response.data.ret
+          if(!ret){
+            console.log("注册成功")
+            sessionStorage.setItem("user", response.data.user)
+            router.push({
+              path: '/',
+              name: 'Home'
+            })
+          } else{
+            alert("注册失败")
+            showErrMsg.value = true
+          }
+        }).catch(error => {
+          console.log(error)
+          alert("服务器异常")
+        })
       } else{
         showErrMsg.value = true
       }

@@ -35,13 +35,29 @@
 
 <script>
 import { ref, reactive, onMounted, computed} from 'vue'
-// import { useRouter } from 'vue-router'
-import { login } from '../../api/login'
+import { useRouter } from 'vue-router'
+import { login, login_get } from '../../api/login'
 import store from '../../store/index'
 
 export default {
   name: 'Login',
   setup() {
+      const router = useRouter()
+      const params = {}
+      login_get(params).then(response => {
+          const ret = response.data.ret
+          if(!ret){
+              sessionStorage.setItem("user", response.data.user)
+              router.push({
+                  path: '/',
+                //   name: 'Home'
+              })
+          } else{
+              console.log("不存在cookie")
+          }
+      }).catch(error => {
+          console.log(error)
+      })
       // 定义普通变量使用ref,定义对象和数组使用reactive
       const showErrMsg = ref(false)
       const infoForm = reactive({
@@ -74,6 +90,7 @@ export default {
               store.commit('update', '1')
               console.log(store.state.count)
               console.log(store.state.name)
+              btnLogin()
           }
       }
       function checkAccount(){
@@ -100,10 +117,15 @@ export default {
                   const ret = response.data.ret
                   const data = response.data.data
                   if(!ret){
-                      alert("登录成功")
                       console.log(data)
+                      // 这里可以使用cookie
                       sessionStorage.setItem('user', response.data.user)
                       console.log(sessionStorage.getItem('user'))
+                      // window.location.href = "/"
+                      router.push({
+                        //   name: 'Home',  // name,path 2选1
+                          path: '/'
+                      })
                   } else{
                       alert("登录失败")
                       showErrMsg.value = true

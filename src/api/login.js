@@ -14,16 +14,13 @@ export function login(params){
     })
 }
 
-// export function login(params){
-//     console.log('2222222222')
-//     console.log(params)
-//     return request({
-//         url: '/login',
-//         method: 'get',
-//         params: {
-//             account: params.account,
-//             password: params.password
-//         },
-//         responseType: 'json'
-//     })
-// }
+export function login_get(params){
+    console.log(params)
+    return request({
+        url: '/login',
+        method: 'get',
+        params: {
+        },
+        responseType: 'json'
+    })
+}

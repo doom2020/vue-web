@@ -54,24 +54,58 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { logout } from '../api/logout.js'
+import { useRouter } from 'vue-router'
+import { home } from '../api/home'
 
 export default {
   name: 'Home',
   setup() {
+    const router = useRouter()
+    // 跳转到首页后调用请求后端首页需要的数据
+    const params = {}
+    home(params).then(response => {
+      console.log(response)
+      const ret = response.data.ret
+      if(!ret){
+        console.log("存在cookie")
+        sessionStorage.setItem("user", response.data.user)
+      } else{
+        router.push({
+          path: '/login',
+          // name: 'Login'
+        })
+      }
+    }).catch(error => {
+      console.log(error)
+    })
     const searchInput = ref(null)
     onMounted(() => {
       searchInput.value.focus()   // 鼠标移入事件
     })
-    const params = {}
     function logoutCurrent(){
+      const params = {}
       logout(params).then(response => {
-        console.log(response)
+        const ret = response.data.ret
+        const data = response.data.data
+        console.log(data)
+        if(!ret){
+          // 退出登录后跳转到登录页面,清除cookie,sessionStorge
+          sessionStorage.clear()
+          router.push({
+            // name: 'Login',
+            path: '/login' // name 和 path 2选1
+          })
+        } else {
+          alert("退出登录失败")
+        }
       }).catch(error => {
+        alert("后端响应异常")
         console.log(error)
       })
     }
+    const user = ref(sessionStorage.getItem("user"))
     return {
-      searchInput, logoutCurrent
+      searchInput, logoutCurrent, user
     }
   }
 }
