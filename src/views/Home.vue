@@ -90,9 +90,7 @@
           </div>
           <div class="modal-body">
             <textarea
-              :value="chatContent"
-              @input="changeChatContent"
-              ref="chatContentRef"
+              v-model="chatContent"
               class="form-control"
               rows="10"
             ></textarea>
@@ -100,13 +98,11 @@
               <div class="col-sm-10" style="padding-left: 0">
                 <input
                   type="text"
-                  :value="inputMessage"
-                  @input="changeInputMessage"
-                  ref="inputMessageRef"
+                  v-model="inputMessage"
                   class="form-control"
                   placeholder="输入信息回车即可发送消息"
                   style="float: left"
-                />{{ inputMessage }}
+                />
               </div>
               <button
                 type="button"
@@ -134,7 +130,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive, toRefs } from "vue";
 import { logout } from "../api/logout.js";
 import { useRouter } from "vue-router";
 import { home } from "../api/home";
@@ -190,22 +186,26 @@ export default {
         });
     }
     const showChatRoom = ref(false);
-    const chatContentRef = ref();
-    const inputMessageRef = ref();
+    const chatInfo = reactive({
+      chatContent: '',
+      inputMessage: ''
+    })
+    var ws = new WebSocket("ws://localhost:8000/chat");
     function openChat() {
-      const ws = new WebSocket("ws://localhost:8000/chat");
       showChatRoom.value = true;
-      ws.onopen = function () {
-        ws.send(user.value);
-      };
-      ws.onmessage = function (event) {
-        console.log("收到服务器的消息: ", event.data);
-      };
+      console.log(1111111111111)
+      console.log(user.value)
+      ws.send(user.value)
     }
+    ws.onmessage = function (event) {
+        console.log("收到服务器的消息: ", event.data);
+        chatInfo.chatContent = event.data
+      };
     function btnSendMessage() {
-      console.log(chatContentRef.value.value);
-      console.log("发送消息给服务器");
-      // ws.send("你好");
+      if (chatInfo.inputMessage){
+        ws.send(chatInfo.inputMessage)
+        chatInfo.inputMessage = ''
+      }
     }
     return {
       searchInput,
@@ -214,8 +214,7 @@ export default {
       showChatRoom,
       openChat,
       btnSendMessage,
-      chatContentRef,
-      inputMessageRef,
+      ...toRefs(chatInfo)
     };
   },
 };
