@@ -90,7 +90,9 @@
           </div>
           <div class="modal-body">
             <textarea
-              ref="chatContent"
+              :value="chatContent"
+              @input="changeChatContent"
+              ref="chatContentRef"
               class="form-control"
               rows="10"
             ></textarea>
@@ -98,11 +100,13 @@
               <div class="col-sm-10" style="padding-left: 0">
                 <input
                   type="text"
-                  ref="inputMessage"
+                  :value="inputMessage"
+                  @input="changeInputMessage"
+                  ref="inputMessageRef"
                   class="form-control"
                   placeholder="输入信息回车即可发送消息"
                   style="float: left"
-                />
+                />{{ inputMessage }}
               </div>
               <button
                 type="button"
@@ -186,8 +190,8 @@ export default {
         });
     }
     const showChatRoom = ref(false);
-    const chatContent = ref(null);
-    const inputMessage = ref(null);
+    const chatContentRef = ref();
+    const inputMessageRef = ref();
     function openChat() {
       const ws = new WebSocket("ws://localhost:8000/chat");
       showChatRoom.value = true;
@@ -197,20 +201,21 @@ export default {
       ws.onmessage = function (event) {
         console.log("收到服务器的消息: ", event.data);
       };
-      // function btnSendMessage() {
-      //   console.log("发送消息给服务器");
-      //   ws.send("你好");
-      // }
+    }
+    function btnSendMessage() {
+      console.log(chatContentRef.value.value);
+      console.log("发送消息给服务器");
+      // ws.send("你好");
     }
     return {
       searchInput,
       logoutCurrent,
       user,
       showChatRoom,
-      chatContent,
-      inputMessage,
       openChat,
-      // btnSendMessage,
+      btnSendMessage,
+      chatContentRef,
+      inputMessageRef,
     };
   },
 };
