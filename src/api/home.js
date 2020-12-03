@@ -8,6 +8,7 @@ export function home(params){
         method: 'get',
         params: {
         },
+        withCredentials: true,
         responseType: 'json'
     })
 }

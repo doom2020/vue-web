@@ -11,6 +11,7 @@ export function register(parmas){
             upwd: parmas.upwd,
             cpwd: parmas.cpwd
         },
+        withCredentials: true,
         responseType: 'json'
     })
 }
@@ -23,6 +24,7 @@ export function check_account(params){
             post_type: 'check_account',
             account: params.account
         },
+        withCredentials: true,
         responseType: 'json'
 
     })
@@ -36,6 +38,7 @@ export function check_phone(params){
             post_type: 'check_phone',
             phone: params.phone
         },
+        withCredentials: true,
         responseType: 'json'
     })
 }

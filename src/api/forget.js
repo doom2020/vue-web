@@ -6,6 +6,7 @@ export function resetPassword(params) {
         url: '/forget',
         method: 'post',
         data: '',
+        withCredentials: true,
         responseType: 'json'
     })
 }

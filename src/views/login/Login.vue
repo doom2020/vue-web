@@ -36,28 +36,31 @@
 <script>
 import { ref, reactive, onMounted, computed} from 'vue'
 import { useRouter } from 'vue-router'
-import { login, login_get } from '../../api/login'
+import { login } from '../../api/login'
 import store from '../../store/index'
+import Cookie from 'js-cookie'
 
 export default {
   name: 'Login',
   setup() {
       const router = useRouter()
-      const params = {}
-      login_get(params).then(response => {
-          const ret = response.data.ret
-          if(!ret){
-              sessionStorage.setItem("user", response.data.user)
-              router.push({
-                  path: '/',
-                //   name: 'Home'
-              })
-          } else{
-              console.log("不存在cookie")
-          }
-      }).catch(error => {
-          console.log(error)
-      })
+    //   const params = {}
+      // 跳转到登录页面后立刻向后端登录接口发起get请求(存在session或者cookie则直接跳转到首页,否则留在登录页面)
+    //   login_get(params).then(response => {
+    //       const ret = response.data.ret
+    //       if(!ret){
+    //           sessionStorage.setItem("user", response.data.user)
+    //           router.push({
+    //               path: '/',
+    //             //   name: 'Home'
+    //           })
+    //       } else{
+    //           console.log("不存在cookie")
+    //           return
+    //       }
+    //   }).catch(error => {
+    //       console.log(error)
+    //   })
       // 定义普通变量使用ref,定义对象和数组使用reactive
       const showErrMsg = ref(false)
       const infoForm = reactive({
@@ -72,24 +75,13 @@ export default {
       const accountInput = ref(null) // 创建一个dom引用,return 出去
       onMounted(() => {
           accountInput.value.focus() // accountInput.value 就是dom对象
-          // console.log("onMounted")
-          // console.log(accountInput.value)
-          window.addEventListener('keydown', keyDown) // 监听键盘回车事件keyDown 移除事件监听 removeEventListener(event, function)
+        //   window.addEventListener('keydown', keyDown) // 监听键盘回车事件keyDown 移除事件监听 removeEventListener(event, function)
           window.addEventListener('keyup', keyUp) // 监听键盘回车事件keyUp
       })
-      // 键盘回车事件
-      function keyDown(e){
-          if(e.keyCode == 13){
-              console.log("keyDown")
-          }
-      }
       function keyUp(e){
           if(e.keyCode == 13){
-              console.log("keyUp")
               store.commit('add', 2)
               store.commit('update', '1')
-              console.log(store.state.count)
-              console.log(store.state.name)
               btnLogin()
           }
       }
@@ -111,17 +103,14 @@ export default {
           if(!infoForm.account || !infoForm.password){
               showErrMsg.value = true
           } else{
-              console.log("进行ajax请求btnLgon")
               const params = { account: infoForm.account, password: infoForm.password}
               login(params).then(response => {
                   const ret = response.data.ret
-                  const data = response.data.data
                   if(!ret){
-                      console.log(data)
                       // 这里可以使用cookie
                       sessionStorage.setItem('user', response.data.user)
-                      console.log(sessionStorage.getItem('user'))
-                      // window.location.href = "/"
+                      Cookie.set("user", response.data.user)
+                      console.log("登录成功")
                       router.push({
                         //   name: 'Home',  // name,path 2选1
                           path: '/'
@@ -136,10 +125,6 @@ export default {
               })
           }
       }
-      function listenKeyupEnter(envet){
-          console.log('keyup enter')
-          console.log(envet)
-      }
       const count = computed(() => {  // 计算属性获取vuex 数据 return
           return store.state.count
       })
@@ -147,7 +132,7 @@ export default {
           return store.state.name
       })
       return {
-          showErrMsg, infoForm, invalidStyle, loginDisabled, keyDown, checkAccount, checkPassword, accountInput, btnLogin, listenKeyupEnter,
+          showErrMsg, infoForm, invalidStyle, loginDisabled, checkAccount, checkPassword, accountInput, btnLogin,
           keyUp, count, name
       }
   }

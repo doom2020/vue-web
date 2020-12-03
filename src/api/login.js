@@ -10,6 +10,7 @@ export function login(params){
             account: params.account,
             password: params.password
         },
+        withCredentials: true,
         responseType: 'json'
     })
 }
@@ -21,6 +22,7 @@ export function login_get(params){
         method: 'get',
         params: {
         },
+        withCredentials: true,
         responseType: 'json'
     })
 }

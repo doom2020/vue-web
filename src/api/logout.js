@@ -9,6 +9,7 @@ export function logout(params){
         data: {
             post_type: 'logout'
         },
+        withCredentials: true,
         responseType: 'json'
     })
 }

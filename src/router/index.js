@@ -39,26 +39,26 @@ afterEach(to, from) 跳转后
  */
 router.beforeEach((to, from, next) => {
   if (to.name === 'Login'){
-    console.log("to login page")
+    // console.log("to login page")
     // next({ name: 'Login' })
   // } else {
   //   next()
   }
   if (to.name === 'Register'){
     // next({ name: 'Register' })
-    console.log("to register page")
+    // console.log("to register page")
   // } else {
   //   next()
   }
   if (to.name === 'Home'){
     // next({ name: 'Home' })
-    console.log("to home page")
+    // console.log("to home page")
   // } else {
   //   next()
   }
   if (to.name === 'Forget'){
     // next({ name: 'Forget' })
-    console.log("to forget password page")
+    // console.log("to forget password page")
   } else {
     next()
   }
@@ -66,10 +66,10 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to, from) => {
   if (to.name === 'Home'){
-    console.log("gone home page")
+    // console.log("gone home page")
   }
   if (from.name === 'Home'){
-    console.log("form this come here")
+    // console.log("form this come here")
   }
 })
 
