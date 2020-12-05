@@ -187,34 +187,39 @@ export default {
     }
     const showChatRoom = ref(false);
     const chatInfo = reactive({
-      chatContent: '',
-      inputMessage: ''
-    })
-    var ws = new WebSocket("ws://localhost:8000/chat");
+      chatContent: "",
+      inputMessage: "",
+    });
     function openChat() {
       showChatRoom.value = true;
-      console.log(1111111111111)
-      console.log(user.value)
-      ws.send(user.value)
+      console.log(1111111111111);
+      const ws = new WebSocket("ws://localhost:8000/chat");
+      console.log(ws);
+      console.log(user.value);
+      setTimeout(() => {
+        ws.send(user.value);
+      }, 1000);
+      // ws.send(user.value);
+
+      // ws.onmessage = function (event) {
+      //   console.log("收到服务器的消息: ", event.data);
+      //   chatInfo.chatContent = event.data;
+      // };
     }
-    ws.onmessage = function (event) {
-        console.log("收到服务器的消息: ", event.data);
-        chatInfo.chatContent = event.data
-      };
-    function btnSendMessage() {
-      if (chatInfo.inputMessage){
-        ws.send(chatInfo.inputMessage)
-        chatInfo.inputMessage = ''
-      }
-    }
+    // function btnSendMessage() {
+    //   if (chatInfo.inputMessage) {
+    //     ws.send(chatInfo.inputMessage);
+    //     chatInfo.inputMessage = "";
+    //   }
+    // }
     return {
       searchInput,
       logoutCurrent,
       user,
       showChatRoom,
       openChat,
-      btnSendMessage,
-      ...toRefs(chatInfo)
+      // btnSendMessage,
+      ...toRefs(chatInfo),
     };
   },
 };
