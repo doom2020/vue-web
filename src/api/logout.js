@@ -1,13 +1,12 @@
 import request from '../utils/request'
 
 
-export function logout(params){
+export function to_logout(params){
     console.log(params)
     return request({
         url: '/',
-        method: 'post',
-        data: {
-            post_type: 'logout'
+        method: 'get',
+        params: {
         },
         withCredentials: true,
         responseType: 'json'
