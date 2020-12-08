@@ -1,117 +1,61 @@
 <template>
   <div class="register">
     <div style="text-align: center; margin-top: 20px">
-      <img src="./../../assets/logo.png" style="width: 48px; height: 48px" />
+      <img src="./../../assets/logo.png" style="width: 48px; height: 48px">
     </div>
     <div style="text-align: center; margin-top: 5px; margin-bottom: 10px">
       <span><strong>hot me</strong></span>
     </div>
-    <div
-      style="
-        width: 600px;
-        height: 400px;
-        background-color: #e6e6fa;
-        margin: 0 auto;
-        border-radius: 6px;
-      "
-    >
+    <div style="width: 600px;height: 400px;background-color: #e6e6fa;margin: 0 auto;border-radius: 6px;">
       <form style="padding-top: 15px" class="form-horizontal">
         <div class="form-group has-success has-feedback">
           <label class="control-label col-sm-2" for="account">用户账号</label>
           <div class="col-sm-8">
-            <input
-              type="text"
-              @blur="checkAccount"
-              v-model="infoForm.account"
-              ref="accountInput"
-              class="form-control"
-              placeholder="输入昵称"
-            />
-            <span
-              :class="classInfo.account"
-              class="form-control-feedback"
-              :style="styleInfo.account"
-            ></span>
+            <input type="text" @blur="checkAccount" v-model="state.infoForm.account" ref="accountInput" class="form-control" placeholder="输入昵称">
+            <span :class="state.classInfo.account" class="form-control-feedback" :style="state.styleInfo.account"></span>
           </div>
           <div class="col-sm-2" style="height: 34px; line-height: 35px">
-            <span :style="styleInfo.account">{{ errorMsg.account }}</span>
+            <span :style="state.styleInfo.account">{{ state.errorMsg.account }}</span>
           </div>
         </div>
         <div class="form-group has-success has-feedback">
           <label class="control-label col-sm-2" for="phone">用户手机</label>
           <div class="col-sm-8">
-            <input
-              type="text"
-              @blur="checkPhone"
-              v-model="infoForm.phone"
-              class="form-control"
-              placeholder="输入手机号"
-            />
-            <span
-              :class="classInfo.phone"
-              class="form-control-feedback"
-              :style="styleInfo.phone"
-            ></span>
+            <input type="text" @blur="checkPhone" v-model="state.infoForm.phone" class="form-control" placeholder="输入手机号">
+            <span :class="state.classInfo.phone" class="form-control-feedback" :style="state.styleInfo.phone"></span>
           </div>
           <div class="col-sm-2" style="height: 34px; line-height: 35px">
-            <span :style="styleInfo.phone">{{ errorMsg.phone }}</span>
+            <span :style="state.styleInfo.phone">{{ state.errorMsg.phone }}</span>
           </div>
         </div>
         <div class="form-group has-success has-feedback">
           <label class="control-label col-sm-2" for="upwd">用户密码</label>
           <div class="col-sm-8">
-            <input
-              type="password"
-              @blur="checkUpwd"
-              v-model="infoForm.upwd"
-              class="form-control"
-              placeholder="输人密码"
-            />
-            <span
-              :class="classInfo.upwd"
-              class="form-control-feedback"
-              :style="styleInfo.upwd"
-            ></span>
+            <input type="password" @blur="checkUpwd" v-model="state.infoForm.upwd" class="form-control" placeholder="输人密码">
+            <span :class="state.classInfo.upwd" class="form-control-feedback" :style="state.styleInfo.upwd"></span>
           </div>
           <div class="col-sm-2" style="height: 34px; line-height: 35px">
-            <span :style="styleInfo.upwd">{{ errorMsg.upwd }}</span>
+            <span :style="state.styleInfo.upwd">{{ state.errorMsg.upwd }}</span>
           </div>
         </div>
         <div class="form-group has-success has-feedback">
           <label class="control-label col-sm-2" for="cpwd">确认密码</label>
           <div class="col-sm-8">
-            <input
-              type="password"
-              @blur="checkCpwd"
-              v-model="infoForm.cpwd"
-              class="form-control"
-              placeholder="确认密码"
-            />
-            <span
-              :class="classInfo.cpwd"
-              class="form-control-feedback"
-              :style="styleInfo.cpwd"
-            ></span>
+            <input type="password" @blur="checkCpwd" v-model="state.infoForm.cpwd" class="form-control" placeholder="确认密码">
+            <span :class="state.classInfo.cpwd" class="form-control-feedback" :style="state.styleInfo.cpwd"></span>
           </div>
           <div class="col-sm-2" style="height: 34px; line-height: 35px">
-            <span :style="styleInfo.upwd">{{ errorMsg.cpwd }}</span>
+            <span :style="state.styleInfo.upwd">{{ state.errorMsg.cpwd }}</span>
           </div>
         </div>
         <div style="margin-top: 60px; text-align: center">
-          <button
-            @click="btnRegister"
-            type="button"
-            class="btn btn-success"
-            style="width: 400px"
-          >
-            Register
-          </button>
+          <button @click="toRegister" type="button" class="btn btn-success" style="width: 400px">Register</button>
         </div>
       </form>
       <div style="margin-top: 20px; text-align: right">
         <a href="/login" style="padding-right: 100px">已有账号?</a>
       </div>
-      <div style="text-align: center; margin-top: 30px" v-show="showErrMsg">
+      <div style="text-align: center; margin-top: 30px" v-show="state.showErrMsg">
         <h3 style="color: #ff3333">注册失败</h3>
       </div>
     </div>
@@ -119,210 +63,183 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from "vue";
-import { register, check_account, check_phone } from "../../api/register";
-import { useRouter } from "vue-router";
+import { ref, reactive, onMounted } from "vue"
+import { to_register, check_account, check_phone } from "../../api/register"
+import { useRouter } from "vue-router"
+
+// 用户名检查
+function checkAccount(state) {
+  if (!state.infoForm.account) {
+    state.classInfo.account = "glyphicon glyphicon-remove"
+    state.styleInfo.account = { color: "#FF3333" }
+    state.errorMsg.account = "账号不能空"
+    state.flag.account = false
+  } else {
+    console.log("进行ajax请求checkAccount")
+    const params = { account: state.infoForm.account }
+    check_account(params).then((response) => {
+      const ret = response.data.ret
+      if (!ret) {
+        state.classInfo.account = "glyphicon glyphicon-ok"
+        state.styleInfo.account = "green"
+        state.errorMsg.account = ""
+        state.flag.account = true
+      } else {
+        state.classInfo.account = "glyphicon glyphicon-remove"
+        state.styleInfo.account = { color: "#FF3333" }
+        state.errorMsg.account = "用户名无效"
+        state.flag.account = false
+      }
+    }).cacth((error) => {
+      console.log(error)
+      alert("服务器响应异常")
+    })
+  }
+}
+
+// 用户手机检查
+function checkPhone(state) {
+  if (!state.infoForm.phone) {
+    state.classInfo.phone = "glyphicon glyphicon-remove"
+    state.styleInfo.phone = { color: "#FF3333" }
+    state.errorMsg.phone = "号码不能空"
+    state.flag.phone = false
+  } else if (state.infoForm.phone.length != 11) {
+    state.classInfo.phone = "glyphicon glyphicon-remove"
+    state.styleInfo.phone = { color: "#FF3333" }
+    state.errorMsg.phone = "号码不合法"
+    state.flag.phone = false
+  } else {
+    console.log("进行ajax请求checkPhone")
+    const params = { phone: state.infoForm.phone }
+    check_phone(params).then((response) => {
+      const ret = response.data.ret
+      if (!ret) {
+        state.classInfo.phone = "glyphicon glyphicon-ok"
+        state.styleInfo.phone = { color: "green" }
+        state.errorMsg.phone = ""
+        state.flag.phone = true
+      } else {
+        state.classInfo.phone = "glyphicon glyphicon-remove"
+        state.styleInfo.phone = { color: "#FF3333" }
+        state.errorMsg.phone = "手机号无效"
+        state.flag.phone = false
+      }
+    }).catch((error) => {
+      console.log(error)
+      alert("服务器异常")
+    })
+  }
+}
+
+// 密码检查
+function checkUpwd(state) {
+  if (!state.infoForm.upwd) {
+    state.classInfo.upwd = "glyphicon glyphicon-remove"
+    state.styleInfo.upwd = { color: "#FF3333" }
+    state.errorMsg.upwd = "密码不能空"
+    state.flag.upwd = false
+  } else if (state.infoForm.upwd.length < 8 || state.infoForm.upwd.length > 16) {
+    state.classInfo.upwd = "glyphicon glyphicon-remove"
+    state.styleInfo.upwd = { color: "#FF3333" }
+    state.errorMsg.upwd = "密码不合法"
+    state.flag.upwd = false
+  } else {
+    state.classInfo.upwd = "glyphicon glyphicon-ok"
+    state.styleInfo.upwd = {}
+    state.errorMsg.upwd = "验证ok"
+    state.flag.upwd = true
+  }
+}
+
+// 密码确认
+function checkCpwd(state) {
+  if (!state.infoForm.cpwd) {
+    state.classInfo.cpwd = "glyphicon glyphicon-remove"
+    state.styleInfo.cpwd = { color: "#FF3333" }
+    state.errorMsg.cpwd = "密码不能空"
+    state.flag.cpwd = false
+  } else if (state.infoForm.cpwd != state.infoForm.upwd) {
+    state.classInfo.cpwd = "glyphicon glyphicon-remove"
+    state.styleInfo.cpwd = { color: "#FF3333" }
+    state.errorMsg.cpwd = "输入不一致"
+    state.flag.cpwd = false
+  } else {
+    state.classInfo.cpwd = "glyphicon glyphicon-ok"
+    state.styleInfo.cpwd = {}
+    state.errorMsg.cpwd = "验证ok"
+    state.flag.cpwd = true
+  }
+}
+
+// 注册
+function toRegister(state, router) {
+  if (state.flag.account && state.flag.phone && state.flag.upwd && state.flag.cpwd) {
+    const params = {
+      account: state.infoForm.account,
+      phone: state.infoForm.phone,
+      upwd: state.infoForm.upwd,
+      cpwd: state.infoForm.cpwd
+    }
+    to_register(params).then((response) => {
+      const ret = response.data.ret
+      if (!ret) {
+        sessionStorage.setItem("user", response.data.user)
+        router.push({
+          path: "/login"
+          // name: 'Home'
+        })
+      } else {
+        alert("注册失败");
+        state.showErrMsg = true
+      }
+    }).catch((error) => {
+      console.log(error)
+      alert("服务器异常")
+    })
+  } else {
+    state.showErrMsg = true
+  }
+}
 
 export default {
   name: "Register",
   setup() {
-    const router = useRouter();
+    // router对象
+    const router = useRouter()
     // 定义变量
-    const infoForm = reactive({
-      account: "",
-      phone: "",
-      upwd: "",
-      cpwd: "",
-    });
-    const styleInfo = reactive({
-      account: {},
-      phone: {},
-      upwd: {},
-      cpwd: {},
-    });
-    const classInfo = reactive({
-      account: "glyphicon glyphicon glyphicon-user",
-      phone: "glyphicon glyphicon-earphone",
-      upwd: "glyphicon glyphicon-lock",
-      cpwd: "glyphicon glyphicon-lock",
-    });
-    const errorMsg = reactive({
-      account: "",
-      phone: "",
-      upwd: "",
-      cpwd: "",
-    });
-    const showErrMsg = ref(false);
-    const flag = reactive({
-      account: false,
-      phone: false,
-      upwd: false,
-      cpwd: false,
-    });
-    const accountInput = ref(null); // 定义dom引用
+    const state = reactive({
+      infoForm: {account: "", phone: "", upwd: "", cpwd: ""},
+      styleInfo: {account: {}, phone: {}, upwd: {}, cpwd: {}},
+      classInfo: {
+        account: "glyphicon glyphicon glyphicon-user",
+        phone: "glyphicon glyphicon-earphone",
+        upwd: "glyphicon glyphicon-lock",
+        cpwd: "glyphicon glyphicon-lock"
+      },
+      errorMsg: {account: "", phone: "", upwd: "", cpwd: ""},
+      showErrMsg: false,
+      flag: {account: false, phone: false, upwd: false, cpwd: false},
+
+    })
+    const accountInput = ref(null) // 定义dom引用
     // 生命周期函数
     onMounted(() => {
-      accountInput.value.focus(); // .value获取dom节点
-      window.addEventListener("keydown", keyDown); // 监听键盘回车事件
-    });
+      accountInput.value.focus() // .value获取dom节点
+      window.addEventListener("keyup", keyUp) // 监听键盘回车事件
+    })
     // 定义方法
-    function keyDown(e) {
+    function keyUp(e) {
       if (e.keyCode === 13) {
-        btnRegister();
+        toRegister(state, router)
       }
     }
-    function checkAccount() {
-      if (!infoForm.account) {
-        classInfo.account = "glyphicon glyphicon-remove";
-        styleInfo.account = { color: "#FF3333" };
-        errorMsg.account = "账号不能空";
-        flag.account = false;
-      } else {
-        console.log("进行ajax请求checkAccount");
-        const params = { account: infoForm.account };
-        check_account(params)
-          .then((response) => {
-            console.log(response);
-            const ret = response.data.ret;
-            if (!ret) {
-              console.log("用户名ok");
-              classInfo.account = "glyphicon glyphicon-ok";
-              styleInfo.account = "green";
-              errorMsg.account = "";
-              flag.account = true;
-            } else {
-              classInfo.account = "glyphicon glyphicon-remove";
-              styleInfo.account = { color: "#FF3333" };
-              errorMsg.account = "用户名无效";
-              flag.account = false;
-            }
-          })
-          .cacth((error) => {
-            console.log(error);
-            alert("服务器响应异常");
-          });
-      }
-    }
-    function checkPhone() {
-      if (!infoForm.phone) {
-        classInfo.phone = "glyphicon glyphicon-remove";
-        styleInfo.phone = { color: "#FF3333" };
-        errorMsg.phone = "号码不能空";
-        flag.phone = false;
-      } else if (infoForm.phone.length != 11) {
-        classInfo.phone = "glyphicon glyphicon-remove";
-        styleInfo.phone = { color: "#FF3333" };
-        errorMsg.phone = "号码不合法";
-        flag.phone = false;
-      } else {
-        console.log("进行ajax请求checkPhone");
-        const params = { phone: infoForm.phone };
-        check_phone(params)
-          .then((response) => {
-            console.log(response);
-            const ret = response.data.ret;
-            if (!ret) {
-              console.log("手机号ok");
-              classInfo.phone = "glyphicon glyphicon-ok";
-              styleInfo.phone = { color: "green" };
-              errorMsg.phone = "";
-              flag.phone = true;
-            } else {
-              console.log("手机号无效");
-              classInfo.phone = "glyphicon glyphicon-remove";
-              styleInfo.phone = { color: "#FF3333" };
-              errorMsg.phone = "手机号无效";
-              flag.phone = false;
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("服务器异常");
-          });
-      }
-    }
-    function checkUpwd() {
-      if (!infoForm.upwd) {
-        classInfo.upwd = "glyphicon glyphicon-remove";
-        styleInfo.upwd = { color: "#FF3333" };
-        errorMsg.upwd = "密码不能空";
-        flag.upwd = false;
-      } else if (infoForm.upwd.length < 8 || infoForm.upwd.length > 16) {
-        classInfo.upwd = "glyphicon glyphicon-remove";
-        styleInfo.upwd = { color: "#FF3333" };
-        errorMsg.upwd = "密码不合法";
-        flag.upwd = false;
-      } else {
-        classInfo.upwd = "glyphicon glyphicon-ok";
-        styleInfo.upwd = {};
-        errorMsg.upwd = "验证ok";
-        flag.upwd = true;
-      }
-    }
-    function checkCpwd() {
-      if (!infoForm.cpwd) {
-        classInfo.cpwd = "glyphicon glyphicon-remove";
-        styleInfo.cpwd = { color: "#FF3333" };
-        errorMsg.cpwd = "密码不能空";
-        flag.cpwd = false;
-      } else if (infoForm.cpwd != infoForm.upwd) {
-        classInfo.cpwd = "glyphicon glyphicon-remove";
-        styleInfo.cpwd = { color: "#FF3333" };
-        errorMsg.cpwd = "输入不一致";
-        flag.cpwd = false;
-      } else {
-        classInfo.cpwd = "glyphicon glyphicon-ok";
-        styleInfo.cpwd = {};
-        errorMsg.cpwd = "验证ok";
-        flag.cpwd = true;
-      }
-    }
-    function btnRegister() {
-      if (flag.account && flag.phone && flag.upwd && flag.cpwd) {
-        const params = {
-          account: infoForm.account,
-          phone: infoForm.phone,
-          upwd: infoForm.upwd,
-          cpwd: infoForm.cpwd,
-        };
-        register(params)
-          .then((response) => {
-            const ret = response.data.ret;
-            if (!ret) {
-              sessionStorage.setItem("user", response.data.user);
-              router.push({
-                path: "/login",
-                // name: 'Home'
-              });
-            } else {
-              alert("注册失败");
-              showErrMsg.value = true;
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("服务器异常");
-          });
-      } else {
-        showErrMsg.value = true;
-      }
-    }
-
-    return {
-      infoForm,
-      styleInfo,
-      classInfo,
-      errorMsg,
-      flag,
-      accountInput,
-      keyDown,
-      showErrMsg,
-      checkAccount,
-      checkPhone,
-      checkUpwd,
-      checkCpwd,
-      btnRegister,
-    };
-  },
-};
+    // checkAccount(state)
+    // check_phone(state)
+    // checkUpwd(state)
+    // checkCpwd(state)
+    // toRegister(state, router)
+    return { state, accountInput, keyUp, checkAccount, checkPhone, checkUpwd, checkCpwd, toRegister }
+  }
+}
 </script>
